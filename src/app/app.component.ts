@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   public googleClientId = environment.googleClientId;
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   public ngOnInit(): void {
     
@@ -21,6 +22,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     (window as any).handleGoogleSignin = (response: any) => {
       console.log("Got authentication response:", response);
       const jwt = response.credential;
+      this.http.post(`${environment.apiUrl}/users/login`, { token: jwt })
+        .subscribe(res => {
+          console.log("Login response:", res);
+        });
     }
   }
 }
