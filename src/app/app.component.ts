@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'habits';
 
-  constructor(private socialAuthService: SocialAuthService) {}
+  public googleClientId = environment.googleClientId;
+
+  constructor() {}
 
   public ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user) => {
-      console.log(user);
-    });
+    
   }
 
-  loginWithGoogle(): void {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  public ngAfterViewInit(): void {
+    (window as any).handleGoogleSignin = (response: any) => {
+      console.log("Got authentication response:", response);
+      const jwt = response.credential;
+    }
   }
 }
