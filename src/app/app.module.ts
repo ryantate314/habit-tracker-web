@@ -8,6 +8,8 @@ import { AppComponent } from './app.component';
 import { HabitsComponent } from './habits/habits.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
 import { LoginComponent } from './login/login.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,10 @@ import { LoginComponent } from './login/login.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ModalModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AUTH_INTERCEPTOR

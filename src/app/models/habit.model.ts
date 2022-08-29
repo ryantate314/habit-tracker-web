@@ -6,7 +6,7 @@ export interface Habit {
 export interface HabitCategory extends RootCategory {
     id?: string;
     name: string;
-    color: string;
+    color?: string;
     habits: Habit[];
     subCategories: HabitCategory[]
 }
