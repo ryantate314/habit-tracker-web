@@ -32,12 +32,14 @@ export class AuthInterceptor implements HttpInterceptor {
       switchMap(([isAuthenticated, token]) => {
 
         if (isAuthenticated) {
+          console.log("Adding auth token");
           return next.handle(
             request.clone({
               headers: request.headers.set("Authorization", `Bearer ${token}`)
             })
           );
         }
+        console.log("Not authenticated");
 
         return throwError(() =>
           new Error("Cannot perform HTTP request without first being authenticated."));

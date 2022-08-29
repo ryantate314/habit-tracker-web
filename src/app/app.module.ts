@@ -7,11 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HabitsComponent } from './habits/habits.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HabitsComponent
+    HabitsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,21 @@
-<h1>Habits</h1>
-<ng-container *ngIf="habits$ | async as habitRoot; else loading">
-    <div>
-        <div *ngFor="let category of habitRoot.categories">
+<ng-container *ngIf="habits; else loading">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <button *ngIf="breadCrumbs.length" class="btn" (click)="back()">Back</button>
+            <span>
+                <span *ngFor="let crumb of breadCrumbs" class="pe-1">/ {{crumb.name}}</span>
+            </span>
+        </div>
+    </nav>
+    <div class="d-flex flex-row mt-3">
+        <div class="category" *ngFor="let category of habits.subCategories" (click)="openCategory(category)">
             <div>{{category.name}}</div>
+        </div>
+        <div class="habit" *ngFor="let habit of habits.habits" (click)="clickHabit(habit)">
+            <div>{{habit.name}}</div>
+        </div>
+        <div id="add-button" class="habit" (click)="addHabit()">
+            +
         </div>
     </div>
 </ng-container>

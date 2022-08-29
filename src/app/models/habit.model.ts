@@ -3,14 +3,17 @@ export interface Habit {
     name: string
 }
 
-export interface HabitCategory {
+export interface HabitCategory extends RootCategory {
     id?: string;
     name: string;
+    color: string;
     habits: Habit[];
     subCategories: HabitCategory[]
 }
 
 export interface RootCategory {
     habits: Habit[];
-    categories: HabitCategory[];
+    subCategories: HabitCategory[];
+    color?: string;
+    name?: string;
 }

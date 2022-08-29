@@ -9,27 +9,10 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent {
   title = 'habits';
 
-  public googleClientId = environment.googleClientId;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor() {}
 
-  public ngOnInit(): void {
-    this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-      if (isAuthenticated) {
-        this.router.navigate(["habits"]);
-      }
-    })
-  }
-
-  public ngAfterViewInit(): void {
-    (window as any).handleGoogleSignin = (response: any) => {
-      console.log("Got authentication response:", response);
-      const jwt = response.credential;
-      this.auth.login(jwt)
-        .subscribe();
-    }
-  }
 }

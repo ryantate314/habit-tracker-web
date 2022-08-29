@@ -37,7 +37,11 @@ export class AuthService {
         this._token$.next(this.getTokenString()!);
         this._isAuthenticated$.next(true);
       }
+      else
+        this._isAuthenticated$.next(false);
     }
+    else
+      this._isAuthenticated$.next(false);
   }
 
   private getTokenString() {
