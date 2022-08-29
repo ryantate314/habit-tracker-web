@@ -1,0 +1,12 @@
+<h1>Habits</h1>
+<ng-container *ngIf="habits$ | async as habitRoot; else loading">
+    <div>
+        <div *ngFor="let category of habitRoot.categories">
+            <div>{{category.name}}</div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #loading>
+    Loading...
+</ng-template>

@@ -5,10 +5,13 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HabitsComponent } from './habits/habits.component';
+import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HabitsComponent
   ],
   imports: [
     BrowserModule,
@@ -16,6 +19,7 @@ import { AppComponent } from './app.component';
     HttpClientModule
   ],
   providers: [
+    AUTH_INTERCEPTOR
   ],
   bootstrap: [AppComponent]
 })
