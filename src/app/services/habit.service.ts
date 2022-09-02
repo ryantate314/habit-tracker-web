@@ -17,17 +17,27 @@ export class HabitService {
     );
   }
 
-  public createHabit(habit: Habit): Observable<Habit> {
+  public createHabit(habit: Habit, categoryId?: string): Observable<Habit> {
     return this.http.post<Habit>(
       `${environment.apiUrl}/habits`,
-      habit
+      habit,
+      {
+        params: {
+          categoryId: categoryId ?? ''
+        }
+      }
     );
   }
 
-  public createCategory(category: HabitCategory): Observable<HabitCategory> {
+  public createCategory(category: HabitCategory, parentCategoryId?: string): Observable<HabitCategory> {
     return this.http.post<HabitCategory>(
       `${environment.apiUrl}/habit-categories`,
-      category
+      category,
+      {
+        params: {
+          parentCategoryId: parentCategoryId ?? ''
+        }
+      }
     );
   }
 }

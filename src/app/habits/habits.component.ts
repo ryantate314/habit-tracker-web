@@ -5,6 +5,7 @@ import { Habit, HabitCategory, RootCategory } from '../models/habit.model';
 import { HabitService } from '../services/habit.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-habits',
@@ -26,7 +27,7 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   addHabitForm: FormGroup;
 
-  constructor(private habitService: HabitService, private modalService: BsModalService, fb: FormBuilder) {
+  constructor(private habitService: HabitService, private modalService: BsModalService, fb: FormBuilder, private auth: AuthService) {
     this.addHabitForm = fb.group({
       category: 'habit',
       name: ['', [
@@ -61,20 +62,26 @@ export class HabitsComponent implements OnInit, OnDestroy {
     ((parent) => {
       if (this.addHabitForm.valid) {
         if (this.addHabitForm.get("category")?.value === "habit") {
-          this.habitService.createHabit({
-            name: this.addHabitForm.get("name")!.value
-          }).subscribe(habit => {
-            parent.habits.push(habit);
-          });
+          const habit: Habit = {
+            name: this.addHabitForm.get("name")!.value,
+            parentCategoryId: parent.id ?? null
+          };
+          this.habitService.createHabit(habit)
+            .subscribe(habit => {
+              parent.habits.push(habit);
+              this.modalRef?.hide();
+            });
         }
         else {
           this.habitService.createCategory({
             name: this.addHabitForm.get("name")!.value,
             habits: [],
             subCategories: [],
-
+            color: null,
+            parentCategoryId: parent.id ?? null
           }).subscribe(category => {
             parent.subCategories.push(category);
+            this.modalRef?.hide();
           })
         }
       }
@@ -92,6 +99,10 @@ export class HabitsComponent implements OnInit, OnDestroy {
       this.habits = this.root;
     else
       this.habits = this.breadCrumbs[this.breadCrumbs.length - 1];
+  }
+
+  logout() {
+    this.auth.logout();
   }
 
 }

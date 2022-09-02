@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable, ReplaySubject, Subject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ALLOW_ANONYMOUS_HEADER } from '../interceptors/auth.interceptor';
@@ -21,7 +22,7 @@ export class AuthService {
     return this._isAuthenticated$;
   }
 
-  private _user$ = new ReplaySubject<User>(1);
+  private _user$ = new ReplaySubject<User | null>(1);
 
   private _token$ = new ReplaySubject<string>(1);
 
@@ -29,7 +30,7 @@ export class AuthService {
     return this._token$;
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     const token = this.getToken();
     if (token !== null) {
       if (token.exp > new Date()) {
@@ -83,5 +84,13 @@ export class AuthService {
         return res.user;
       })
     );
+  }
+
+  public logout(): void {
+    localStorage.removeItem("habit-token");
+    this._isAuthenticated$.next(false);
+    this._token$.next('');
+    this._user$.next(null);
+    this.router.navigate(['/login']);
   }
 }

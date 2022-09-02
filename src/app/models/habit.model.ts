@@ -1,19 +1,17 @@
 export interface Habit {
     id?: string,
-    name: string
+    name: string,
+    parentCategoryId: string | null;
 }
 
 export interface HabitCategory extends RootCategory {
-    id?: string;
-    name: string;
-    color?: string;
-    habits: Habit[];
-    subCategories: HabitCategory[]
 }
 
 export interface RootCategory {
     habits: Habit[];
     subCategories: HabitCategory[];
-    color?: string;
-    name?: string;
+    color: string | null;
+    name: string;
+    id?: string;
+    parentCategoryId: string | null;
 }

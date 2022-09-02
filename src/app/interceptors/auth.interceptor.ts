@@ -7,7 +7,7 @@ import {
   HttpErrorResponse,
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
-import { map, Observable, switchMap, throwError, withLatestFrom } from 'rxjs';
+import { map, Observable, switchMap, take, throwError, withLatestFrom } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 const WHITELIST_HEADER_NAME = "X-Auth-Ignore";
@@ -28,6 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     return this.auth.isAuthenticated$.pipe(
+      take(1),
       withLatestFrom(this.auth.token$),
       switchMap(([isAuthenticated, token]) => {
 
@@ -42,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
         console.log("Not authenticated");
 
         return throwError(() =>
-          new Error("Cannot perform HTTP request without first being authenticated."));
+          new Error("Cannot perform HTTP request to " + request.url + " without first being authenticated."));
       })
     );
   }
