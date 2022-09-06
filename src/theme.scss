@@ -1,0 +1,18 @@
+@import '@angular/material/theming';
+
+// default theme:
+$habits-primary: mat-palette($mat-blue,800);
+$habits-accent: mat-palette($mat-teal);
+
+$habits-warn: mat-palette($mat-red);
+
+$habits-theme: mat-light-theme((
+  color: (
+    primary: $habits-primary,
+    accent: $habits-accent,
+    warn: $habits-warn,
+  )
+));
+
+$color-primary: mat-color($habits-primary);
+$color-accent: mat-color($habits-accent);

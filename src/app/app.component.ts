@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
 
@@ -12,7 +13,14 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'habits';
 
+  isAuthenticated$: Observable<boolean>;
 
-  constructor() {}
 
+  constructor(private readonly auth: AuthService) {
+    this.isAuthenticated$ = this.auth.isAuthenticated$;
+  }
+
+  logout() {
+    this.auth.logout();
+  }
 }
