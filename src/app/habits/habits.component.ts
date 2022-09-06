@@ -101,8 +101,4 @@ export class HabitsComponent implements OnInit, OnDestroy {
       this.habits = this.breadCrumbs[this.breadCrumbs.length - 1];
   }
 
-  logout() {
-    this.auth.logout();
-  }
-
 }

@@ -1,6 +1,3 @@
-<nav class="navbar">
-    <button (click)="logout()">Log Out</button>
-</nav>
 <ng-container *ngIf="habits; else loading">
     <nav class="navbar">
         <div class="container-fluid">
@@ -11,15 +8,15 @@
         </div>
     </nav>
     <div class="d-flex flex-row flex-wrap mt-3">
-        <div class="category" *ngFor="let category of habits.subCategories" (click)="openCategory(category)">
+        <mat-card class="category" *ngFor="let category of habits.subCategories" (click)="openCategory(category)">
             <div>{{category.name}}</div>
-        </div>
-        <div class="habit" *ngFor="let habit of habits.habits" (click)="clickHabit(habit)">
+        </mat-card>
+        <mat-card class="habit" *ngFor="let habit of habits.habits" (click)="clickHabit(habit)">
             <div>{{habit.name}}</div>
-        </div>
-        <div id="add-button" class="habit" (click)="addHabitClick()">
+        </mat-card>
+        <mat-card id="add-button" class="habit" (click)="addHabitClick()">
             +
-        </div>
+        </mat-card>
     </div>
 </ng-container>
 
