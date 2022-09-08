@@ -6,6 +6,8 @@ import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: 'habits', component: HabitsComponent, canActivate: [AuthGuard] },
+  { path: 'habits/:id', component: HabitsComponent, canActivate: [AuthGuard] },
+  { path: 'habits/:id/:name', component: HabitsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'habits', pathMatch: 'full' }
 ];

@@ -5,13 +5,20 @@ export interface Habit {
 }
 
 export interface HabitCategory extends RootCategory {
+    color: string | null;
+    name: string;
+    
+    parentCategoryId: string | null;
 }
 
 export interface RootCategory {
-    habits: Habit[];
-    subCategories: HabitCategory[];
-    color: string | null;
-    name: string;
     id?: string;
-    parentCategoryId: string | null;
+    habits: string[];
+    subCategories: string[];
+}
+
+export interface HabitRoot {
+    habitDictionary: {[key: string]: Habit};
+    categoryDictionary: {[key: string]: HabitCategory};
+    root: RootCategory;
 }
