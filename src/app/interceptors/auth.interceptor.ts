@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
       switchMap(([isAuthenticated, token]) => {
 
         if (isAuthenticated) {
-          console.log("Adding auth token");
+          console.log("Adding auth token", request.url);
           return next.handle(
             request.clone({
               headers: request.headers.set("Authorization", `Bearer ${token}`)

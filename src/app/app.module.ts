@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
     // Angular Material
     MatCardModule,
     MatToolbarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [
     AUTH_INTERCEPTOR

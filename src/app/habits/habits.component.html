@@ -9,7 +9,8 @@
     <div class="d-flex flex-row flex-wrap mt-3">
         <mat-card class="category" *ngIf="this.parentCategory$ | async as parentCategory"
             (click)="back(parentCategory.id!)">
-            <div>..</div>
+            <mat-icon fontIcon="arrow_upward"></mat-icon>
+            <div>{{ currentCategory.name }}</div>
         </mat-card>
         <a class="category-link" [routerLink]="['/habits', category.id, category.name]"
             *ngFor="let category of subCategories$ | async">

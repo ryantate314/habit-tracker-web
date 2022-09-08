@@ -82,8 +82,10 @@ export class HabitsComponent implements OnInit, OnDestroy {
         const castCategory = currentCategory as HabitCategory;
         if (castCategory.parentCategoryId)
           return root.categoryDictionary[castCategory.parentCategoryId];
-        else
+        else if (currentCategory === root.root)
           return null;
+        else
+          return root.root;
       })
     );
   };
@@ -132,8 +134,11 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   }
 
-  back(parentCategoryId: string) {
-    this.router.navigate(["habits", parentCategoryId]);
+  back(parentCategoryId: string | undefined) {
+    if (parentCategoryId)
+      this.router.navigate(["habits", parentCategoryId]);
+    else
+      this.router.navigate(["habits"]);
   }
 
 }
