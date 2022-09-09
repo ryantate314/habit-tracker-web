@@ -14,14 +14,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class HabitsComponent implements OnInit, OnDestroy {
 
-  breadCrumbs: RootCategory[] = [];
-
   modalRef: BsModalRef | null = null;
 
   public currentCategory$: Observable<RootCategory | HabitCategory>;
   public subCategories$: Observable<HabitCategory[]>;
   public habits$: Observable<Habit[]>;
   public parentCategory$: Observable<RootCategory | HabitCategory | null>;
+
+  public breadCrumbs$: Observable<HabitCategory[]>;
 
   private root$: Observable<HabitRoot>;
 
@@ -86,6 +86,20 @@ export class HabitsComponent implements OnInit, OnDestroy {
           return null;
         else
           return root.root;
+      })
+    );
+
+    this.breadCrumbs$ = this.currentCategory$.pipe(
+      withLatestFrom(this.root$),
+      map(([currentCategory, root]) => {
+        let crumbs = [];
+        while (currentCategory && currentCategory != root.root) {
+          const castCategory = currentCategory as HabitCategory;
+          crumbs.push(castCategory);
+          const parentCategory = root.categoryDictionary[castCategory.parentCategoryId!];
+          currentCategory = parentCategory;
+        }
+        return crumbs.reverse();
       })
     );
   };

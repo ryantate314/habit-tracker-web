@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule
   ],
   providers: [
-    AUTH_INTERCEPTOR
+    AUTH_INTERCEPTOR,
+    UNAUTHORIZED_INTERCEPTOR
   ],
   bootstrap: [AppComponent]
 })
