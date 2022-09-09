@@ -18,7 +18,12 @@
                 <div>{{category.name}}</div>
             </mat-card>
         </a>
-        <mat-card class="habit" *ngFor="let habit of habits$ | async" (click)="clickHabit(habit)">
+        <mat-card class="habit"
+            *ngFor="let habit of habits$ | async"
+            (click)="clickHabit(habit)"
+            [matBadge]="habit.numInstancesToday"
+            [matBadgeHidden]="habit.numInstancesToday == 0"
+        >
             <div>{{habit.name}}</div>
         </mat-card>
         <mat-card id="add-button" class="habit" (click)="addHabitClick()">

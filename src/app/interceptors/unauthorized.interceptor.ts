@@ -20,6 +20,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       catchError((err: HttpErrorResponse) => {
 
         if (err.status === 401) {
+          console.log("Detected unauthorized request. Logging out.");
           this.auth.logout();
         }
 

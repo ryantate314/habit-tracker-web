@@ -7,22 +7,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HabitsComponent } from './habits/habits.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
+import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
 import { LoginComponent } from './login/login.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
     AppComponent,
     HabitsComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +38,8 @@ import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.intercepto
     MatCardModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatBadgeModule
   ],
   providers: [
     AUTH_INTERCEPTOR,

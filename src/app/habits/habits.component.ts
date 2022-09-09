@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable, withLatestFrom } from 'rxjs';
-import { Habit, HabitCategory, HabitRoot, RootCategory } from '../models/habit.model';
+import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '../models/habit.model';
 import { HabitService } from '../services/habit.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -145,7 +145,14 @@ export class HabitsComponent implements OnInit, OnDestroy {
   }
 
   clickHabit(habit: Habit) {
+    const instance: HabitInstance = {
+      habitId: habit.id!
+    };
 
+    this.habitService.logHabit(instance)
+      .subscribe(() => {
+
+      });
   }
 
   back(parentCategoryId: string | undefined) {
