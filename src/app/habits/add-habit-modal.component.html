@@ -1,0 +1,22 @@
+<form [formGroup]="addHabitForm">
+    <h4>Create a new Habit or Category</h4>
+    <div class="mb-2">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="itemType-category" value="category"
+                formControlName="category">
+            <label class="form-check-label" for="itemType-category">Category</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="itemType-habit" value="habit" checked="checked"
+                formControlName="category">
+            <label class="form-check-label" for="itemType-habit">Habit</label>
+        </div>
+    </div>
+    <div class="mb-2">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" formControlName="name" />
+    </div>
+
+    <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+    <button type="submit" mat-raised-button btn-primary>Save</button>
+</form>

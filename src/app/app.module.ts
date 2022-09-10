@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HabitsComponent } from './habits/habits.component';
+import { AddHabitModalComponent, HabitsComponent } from './habits/habits.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
 import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
 import { LoginComponent } from './login/login.component';
@@ -19,12 +19,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     HabitsComponent,
     LoginComponent,
+    AddHabitModalComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [
     AUTH_INTERCEPTOR,

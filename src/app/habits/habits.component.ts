@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable, withLatestFrom } from 'rxjs';
 import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '../models/habit.model';
 import { HabitService } from '../services/habit.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-habits',
@@ -13,8 +14,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./habits.component.scss']
 })
 export class HabitsComponent implements OnInit, OnDestroy {
-
-  modalRef: BsModalRef | null = null;
 
   public currentCategory$: Observable<RootCategory | HabitCategory>;
   public subCategories$: Observable<HabitCategory[]>;
@@ -25,26 +24,23 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   private root$: Observable<HabitRoot>;
 
-  @ViewChild("addModal")
-  addModal: TemplateRef<any> | undefined;
+  @ViewChild(MatMenuTrigger, { static: true})
+  public menuTrigger?: MatMenuTrigger;
 
-  addHabitForm: FormGroup;
+  public menuTopLeftPosition = { x: "0px", y: "0px" };
+
+  
 
   constructor(
     private route: ActivatedRoute,
     private habitService: HabitService,
-    private modalService: BsModalService,
     private router: Router,
     fb: FormBuilder,
+    private dialog: MatDialog,
     private auth: AuthService
   ) {
 
-    this.addHabitForm = fb.group({
-      category: 'habit',
-      name: ['', [
-        Validators.required
-      ]]
-    });
+    
 
     this.root$ = this.habitService.habits$;
 
@@ -113,7 +109,9 @@ export class HabitsComponent implements OnInit, OnDestroy {
   }
 
   addHabitClick() {
-    this.modalRef = this.modalService.show(this.addModal!);
+    const dialogRef = this.dialog.open(AddHabitModalComponent, {
+      panelClass: 'mat-dialog-md'
+    });
   }
 
   addHabitSubmit(parentCategoryId: string) {
@@ -144,6 +142,10 @@ export class HabitsComponent implements OnInit, OnDestroy {
     // }
   }
 
+  editHabit(habit: Habit) {
+    
+  }
+
   clickHabit(habit: Habit) {
     const instance: HabitInstance = {
       habitId: habit.id!
@@ -155,11 +157,42 @@ export class HabitsComponent implements OnInit, OnDestroy {
       });
   }
 
+  onHabitRightClick(event: MouseEvent, habit: Habit) {
+    event.preventDefault();
+
+    this.menuTopLeftPosition.x = event.clientX + "px";
+    this.menuTopLeftPosition.y = event.clientY + "px";
+
+    this.menuTrigger!.menuData = habit;
+
+    this.menuTrigger!.openMenu();
+  }
+
   back(parentCategoryId: string | undefined) {
     if (parentCategoryId)
       this.router.navigate(["habits", parentCategoryId]);
     else
       this.router.navigate(["habits"]);
+  }
+
+}
+
+@Component({
+  selector: 'app-add-habit-modal',
+  templateUrl: 'add-habit-modal.component.html',
+})
+export class AddHabitModalComponent {
+
+  public addHabitForm: FormGroup;
+
+  constructor(fb: FormBuilder) {
+
+    this.addHabitForm = fb.group({
+      category: 'habit',
+      name: ['', [
+        Validators.required
+      ]]
+    });
   }
 
 }
