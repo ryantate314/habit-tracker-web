@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, map, Observable, withLatestFrom } from 'rxjs';
-import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '../models/habit.model';
-import { HabitService } from '../services/habit.service';
+import { combineLatest, filter, map, Observable, switchMap, withLatestFrom } from 'rxjs';
+import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '@app/models/habit.model';
+import { HabitService } from '@app/services/habit.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '@app/services/auth.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddHabitModalComponent, DialogData } from './add-habit-modal.component';
 
 @Component({
   selector: 'app-habits',
@@ -108,9 +109,21 @@ export class HabitsComponent implements OnInit, OnDestroy {
     
   }
 
-  addHabitClick() {
+  addHabitClick(habit: Habit) {
+    const data: DialogData = {
+      parentCategoryId: habit.parentCategoryId
+    };
     const dialogRef = this.dialog.open(AddHabitModalComponent, {
-      panelClass: 'mat-dialog-md'
+      panelClass: 'mat-dialog-md',
+      data: data
+    });
+
+    // The dialog returns an observable
+    dialogRef.afterClosed().pipe(
+      filter(x => !!x),
+      switchMap((createTask: Observable<any>) => createTask)
+    ).subscribe(() => {
+
     });
   }
 
@@ -173,26 +186,6 @@ export class HabitsComponent implements OnInit, OnDestroy {
       this.router.navigate(["habits", parentCategoryId]);
     else
       this.router.navigate(["habits"]);
-  }
-
-}
-
-@Component({
-  selector: 'app-add-habit-modal',
-  templateUrl: 'add-habit-modal.component.html',
-})
-export class AddHabitModalComponent {
-
-  public addHabitForm: FormGroup;
-
-  constructor(fb: FormBuilder) {
-
-    this.addHabitForm = fb.group({
-      category: 'habit',
-      name: ['', [
-        Validators.required
-      ]]
-    });
   }
 
 }

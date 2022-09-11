@@ -39,15 +39,10 @@ export class HabitService {
     );
   }
 
-  public createHabit(habit: Habit, categoryId?: string): Observable<Habit> {
+  public createHabit(habit: Habit): Observable<Habit> {
     return this.http.post<Habit>(
       `${environment.apiUrl}/habits`,
-      habit,
-      {
-        params: {
-          categoryId: categoryId ?? ''
-        }
-      }
+      habit
     ).pipe(
       tap(habit => {
         this.state = {
@@ -65,15 +60,10 @@ export class HabitService {
     );
   }
 
-  public createCategory(category: HabitCategory, parentCategoryId?: string): Observable<HabitCategory> {
+  public createCategory(category: HabitCategory): Observable<HabitCategory> {
     return this.http.post<HabitCategory>(
       `${environment.apiUrl}/habit-categories`,
-      category,
-      {
-        params: {
-          parentCategoryId: parentCategoryId ?? ''
-        }
-      }
+      category
     ).pipe(
       tap(category => {
         this.state = {

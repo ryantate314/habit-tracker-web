@@ -1,0 +1,18 @@
+<form [formGroup]="addHabitForm" (submit)="onSubmit()">
+    <h4>Create a new Habit or Category</h4>
+    <div class="mb-2">
+        <mat-radio-group formControlName="category">
+            <mat-radio-button value="category">Category</mat-radio-button>
+            <mat-radio-button value="habit" class="ms-3">Habit</mat-radio-button>
+          </mat-radio-group>
+    </div>
+    <div class="mb-2">
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required="required" />
+          </mat-form-field>
+    </div>
+
+    <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+    <button type="submit" mat-raised-button color="primary">Save</button>
+</form>

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { HabitsComponent } from './habits/habits.component';
-import { LoginComponent } from './login/login.component';
+import { HabitsComponent } from './pages/habits/habits.component';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   { path: 'habits', component: HabitsComponent, canActivate: [AuthGuard] },

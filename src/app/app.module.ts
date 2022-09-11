@@ -5,10 +5,10 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AddHabitModalComponent, HabitsComponent } from './habits/habits.component';
+import { AddHabitModalComponent, HabitsComponent } from './pages/habits/habits.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
 import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './pages/login/login.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +21,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+
 
 @NgModule({
   declarations: [
@@ -44,7 +48,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatIconModule,
     MatBadgeModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatRadioModule
   ],
   providers: [
     AUTH_INTERCEPTOR,
