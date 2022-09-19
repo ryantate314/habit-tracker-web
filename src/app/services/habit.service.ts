@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, ReplaySubject, tap } from 'rxjs';
+import { map, Observable, of, ReplaySubject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '../models/habit.model';
 
@@ -26,6 +26,11 @@ export class HabitService {
   constructor(private http: HttpClient) { }
 
   public getHabits(): Observable<HabitRoot> {
+    // Don't re-query habits after the first one
+    // TODO enable periodically updating habits or implement web socket
+    if (this.state.root)
+      return of(this.state.root);
+
     return this.http.get<HabitRoot>(
       `${environment.apiUrl}/habit-categories`
     ).pipe(
