@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { map, Observable, ReplaySubject, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Habit, HabitCategory, HabitInstance, HabitRoot, RootCategory } from '../models/habit.model';
 
@@ -45,19 +45,37 @@ export class HabitService {
       habit
     ).pipe(
       tap(habit => {
-        this.state = {
-          ...this.state,
-          root: {
-            ...this.state.root!,
-            habitDictionary: {
-              ...this.state.root!.habitDictionary,
-              [habit.id!]: habit
-            }
-          }
-        };
+        this.state = this.addHabitToState(this.state, habit);
         this._habits$.next(this.state.root!);
       })
     );
+  }
+
+  private addHabitToState(state: State, habit: Habit): State{
+    const newState = {
+      ...state,
+      root: {
+        ...this.state.root!,
+        habitDictionary: {
+          ...this.state.root!.habitDictionary,
+          [habit.id!]: habit,
+        }
+      }
+    };
+
+    let parent: HabitCategory | RootCategory;
+    if (habit.parentCategoryId) {
+      parent = newState.root.categoryDictionary[habit.parentCategoryId];
+    }
+    else {
+      parent = newState.root.root;
+    }
+    parent.habits = [
+      ...parent.habits,
+      habit.id!
+    ];
+
+    return newState;
   }
 
   public createCategory(category: HabitCategory): Observable<HabitCategory> {
@@ -66,19 +84,37 @@ export class HabitService {
       category
     ).pipe(
       tap(category => {
-        this.state = {
-          ...this.state,
-          root: {
-            ...this.state.root!,
-            categoryDictionary: {
-              ...this.state.root!.categoryDictionary,
-              [category.id!]: category
-            }
-          }
-        };
+        this.state = this.addCategoryToState(this.state, category);
         this._habits$.next(this.state.root!);
       })
     );
+  }
+
+  private addCategoryToState(state: State, category: HabitCategory): State{
+    const newState = {
+      ...state,
+      root: {
+        ...this.state.root!,
+        categoryDictionary: {
+          ...this.state.root!.categoryDictionary,
+          [category.id!]: category,
+        }
+      }
+    };
+
+    let parent: HabitCategory | RootCategory;
+    if (category.parentCategoryId) {
+      parent = newState.root.categoryDictionary[category.parentCategoryId];
+    }
+    else {
+      parent = newState.root.root;
+    }
+    parent.subCategories = [
+      ...parent.subCategories,
+      category.id!
+    ];
+
+    return newState;
   }
 
   public logHabit(instance: HabitInstance): Observable<void> {
@@ -103,6 +139,24 @@ export class HabitService {
         };
         this._habits$.next(this.state.root!);
       })
-    );;
+    );
   }
+
+  public getHabitInstances(startDate: Date, endDate: Date): Observable<HabitInstance[]> {
+    return this.http.get<HabitInstance[]>(
+      `${environment.apiUrl}/habit-instances`,
+      {
+        params: {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString()
+        }
+      }
+    ).pipe(
+      map(instances => instances.map(instance => ({
+        ...instance,
+        instanceDate: new Date(instance.instanceDate)
+      })))
+    )
+  }
+
 }

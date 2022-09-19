@@ -9,6 +9,12 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddHabitModalComponent, DialogData } from './add-habit-modal.component';
 
+interface ContextMenuData {
+  type: 'Habit' | 'Category',
+  habit?: Habit,
+  category?: HabitCategory
+}
+
 @Component({
   selector: 'app-habits',
   templateUrl: './habits.component.html',
@@ -25,12 +31,12 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   private root$: Observable<HabitRoot>;
 
+  /**
+   * Context menu trigger for habits/categories
+   */
   @ViewChild(MatMenuTrigger, { static: true})
   public menuTrigger?: MatMenuTrigger;
-
   public menuTopLeftPosition = { x: "0px", y: "0px" };
-
-  
 
   constructor(
     private route: ActivatedRoute,
@@ -40,9 +46,6 @@ export class HabitsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private auth: AuthService
   ) {
-
-    
-
     this.root$ = this.habitService.habits$;
 
     const currentCategoryId$: Observable<string | null> = this.route.paramMap.pipe(
@@ -109,9 +112,9 @@ export class HabitsComponent implements OnInit, OnDestroy {
     
   }
 
-  addHabitClick(habit: Habit) {
+  addHabitClick(category: HabitCategory | RootCategory) {
     const data: DialogData = {
-      parentCategoryId: habit.parentCategoryId
+      parentCategoryId: category.id ?? null
     };
     const dialogRef = this.dialog.open(AddHabitModalComponent, {
       panelClass: 'mat-dialog-md',
@@ -125,6 +128,10 @@ export class HabitsComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
 
     });
+  }
+
+  deleteHabit(habit: Habit) {
+
   }
 
   addHabitSubmit(parentCategoryId: string) {
@@ -159,9 +166,14 @@ export class HabitsComponent implements OnInit, OnDestroy {
     
   }
 
+  editCategory(category: HabitCategory) {
+
+  }
+
   clickHabit(habit: Habit) {
     const instance: HabitInstance = {
-      habitId: habit.id!
+      habitId: habit.id!,
+      instanceDate: new Date()
     };
 
     this.habitService.logHabit(instance)
@@ -176,7 +188,26 @@ export class HabitsComponent implements OnInit, OnDestroy {
     this.menuTopLeftPosition.x = event.clientX + "px";
     this.menuTopLeftPosition.y = event.clientY + "px";
 
-    this.menuTrigger!.menuData = habit;
+    const menuData: ContextMenuData = {
+      habit: habit,
+      type: 'Habit'
+    };
+    this.menuTrigger!.menuData = { data: menuData };
+
+    this.menuTrigger!.openMenu();
+  }
+
+  onCategoryRightClick(event: MouseEvent, category: HabitCategory) {
+    event.preventDefault();
+
+    this.menuTopLeftPosition.x = event.clientX + "px";
+    this.menuTopLeftPosition.y = event.clientY + "px";
+
+    const menuData: ContextMenuData = {
+      category: category,
+      type: 'Category'
+    };
+    this.menuTrigger!.menuData = { data: menuData };
 
     this.menuTrigger!.openMenu();
   }

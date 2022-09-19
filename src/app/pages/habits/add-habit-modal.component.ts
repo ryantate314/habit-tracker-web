@@ -22,7 +22,6 @@ export class AddHabitModalComponent {
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private service: HabitService
     ) {
-
         this.addHabitForm = fb.group({
             category: 'habit',
             name: ['', [

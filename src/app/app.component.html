@@ -1,5 +1,9 @@
 <mat-toolbar color="primary">
-    <a [routerLink]="['/']" class="brand">Ryan's Habits Tracker</a>
+    <a [routerLink]="['/']" class="brand me-3">Ryan's Habits Tracker</a>
+    <button mat-button [routerLink]="['history']">
+        <mat-icon fontIcon="today"></mat-icon>
+        History
+    </button>
     <span style="flex: 1 1 auto;"></span>
     <button mat-button *ngIf="isAuthenticated$ | async" (click)="logout()">Log Out</button>
 </mat-toolbar>

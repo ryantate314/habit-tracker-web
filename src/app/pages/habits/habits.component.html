@@ -12,8 +12,11 @@
             <mat-icon fontIcon="arrow_upward"></mat-icon>
             <div>{{ currentCategory.name }}</div>
         </mat-card>
-        <a class="category-link" [routerLink]="['/habits', category.id, category.name]"
-            *ngFor="let category of subCategories$ | async">
+        <a class="category-link"
+            [routerLink]="['/habits', category.id, category.name]"
+            *ngFor="let category of subCategories$ | async"
+            (contextmenu)="onCategoryRightClick($event, category)"
+        >
             <mat-card class="category">
                 <div>{{category.name}}</div>
             </mat-card>
@@ -27,7 +30,7 @@
         >
             <div>{{habit.name}}</div>
         </mat-card>
-        <mat-card id="add-button" class="habit" (click)="addHabitClick()">
+        <mat-card id="add-button" class="habit" (click)="addHabitClick(currentCategory)">
             +
         </mat-card>
     </div>
@@ -45,8 +48,12 @@
 
 <!-- Habit context menu -->
 <mat-menu #habitContextMenu="matMenu"> 
-  <ng-template matMenuContent let-item="item"> 
-    <button mat-menu-item (click)="editHabit(item)">Edit</button>
-    <button mat-menu-item>Bar</button> 
+  <ng-template matMenuContent let-data="data">
+    <ng-container *ngIf="data.type == 'Category'">
+        <button mat-menu-item (click)="editHabit(data.habit)">Edit</button>
+    </ng-container>
+    <ng-container *ngIf="data.type == 'Habit'">
+        <button mat-menu-item (click)="editCategory(data.category)">Edit</button>
+    </ng-container>
   </ng-template> 
 </mat-menu> 

@@ -25,5 +25,7 @@ export interface HabitRoot {
 }
 
 export interface HabitInstance {
+    id?: string;
     habitId: string;
+    instanceDate: Date;
 }

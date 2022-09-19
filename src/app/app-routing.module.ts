@@ -2,12 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { HabitsComponent } from './pages/habits/habits.component';
+import { HistoryComponent } from './pages/history/history.component';
 import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   { path: 'habits', component: HabitsComponent, canActivate: [AuthGuard] },
   { path: 'habits/:id', component: HabitsComponent, canActivate: [AuthGuard] },
   { path: 'habits/:id/:name', component: HabitsComponent, canActivate: [AuthGuard] },
+  { path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
+  { path: 'history/:date', component: HistoryComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'habits', pathMatch: 'full' }
 ];
