@@ -1,7 +1,7 @@
 {
     "background_color": "navy",
     "description": "Keep track of daily habits.",
-    "display": "fullscreen",
+    "display": "minimal-ui",
     "icons": [
       {
         "src": "assets/clock.png",

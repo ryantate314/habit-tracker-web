@@ -54,6 +54,7 @@
     </ng-container>
     <ng-container *ngIf="data.type == 'Habit'">
         <button mat-menu-item (click)="editCategory(data.category)">Edit</button>
+        <button mat-menu-item [disabled]="data.habit.numInstancesToday == 0" (click)="removeLastInstance(data.habit)">Remove Last Instance</button>
     </ng-container>
   </ng-template> 
 </mat-menu> 

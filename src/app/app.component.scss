@@ -10,3 +10,11 @@
     text-decoration: none;
     color: white;
 }
+
+.mat-sidenav-container{
+    min-height: 93vh !important;
+}
+
+mat-sidenav {
+    width: 50vw;
+}

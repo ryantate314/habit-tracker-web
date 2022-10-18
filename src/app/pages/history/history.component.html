@@ -28,6 +28,7 @@
         <mat-card-subtitle>{{ day.date | date: 'shortDate' }}</mat-card-subtitle>
 
         <div *ngFor="let habit of day.habits" class="habit">
+            {{ habit.habitName ?? '?' }}
             {{ habit.instanceDate | date: 'shortTime' }}
         </div>
     </mat-card>

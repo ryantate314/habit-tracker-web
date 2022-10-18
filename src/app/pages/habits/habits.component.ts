@@ -219,4 +219,9 @@ export class HabitsComponent implements OnInit, OnDestroy {
       this.router.navigate(["habits"]);
   }
 
+  removeLastInstance(habit: Habit) {
+    this.habitService.removeLastInstance(habit.id!)
+      .subscribe(() => {});
+  }
+
 }

@@ -1,12 +1,32 @@
 <mat-toolbar color="primary">
+    <div class="d-sm-none">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
     <a [routerLink]="['/']" class="brand me-3">Ryan's Habits Tracker</a>
-    <button mat-button [routerLink]="['history']">
-        <mat-icon fontIcon="today"></mat-icon>
-        History
-    </button>
-    <span style="flex: 1 1 auto;"></span>
-    <button mat-button *ngIf="isAuthenticated$ | async" (click)="logout()">Log Out</button>
+    <div class="d-none d-sm-flex w-100" *ngIf="isAuthenticated$ | async">
+        <button mat-button [routerLink]="['history']">
+            <mat-icon fontIcon="today"></mat-icon>
+            History
+        </button>
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-button (click)="logout()">Log Out</button>
+    </div>
 </mat-toolbar>
-<div class="container-fluid">
-    <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="example-container">
+    <mat-sidenav color="primary" #sidenav class="d-sm-none" mode="over" opened="false">
+        <div class="d-flex flex-column">
+            <button mat-button [routerLink]="['history']">
+                <mat-icon fontIcon="today"></mat-icon>
+                History
+            </button>
+            <button mat-button (click)="logout()">Log Out</button>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

@@ -28,4 +28,5 @@ export interface HabitInstance {
     id?: string;
     habitId: string;
     instanceDate: Date;
+    habitName?: string;
 }

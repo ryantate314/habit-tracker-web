@@ -12,6 +12,7 @@ interface State {
   providedIn: 'root'
 })
 export class HabitService {
+  
 
   private _habits$ = new ReplaySubject<HabitRoot>(1);
 
@@ -129,20 +130,45 @@ export class HabitService {
     ).pipe(
       tap(() => {
         const habit = this.state.root!.habitDictionary[instance.habitId];
-        this.state = {
-          ...this.state,
-          root: {
-            ...this.state.root!,
-            habitDictionary: {
-              ...this.state.root!.habitDictionary,
-              [habit.id!]: {
-                ...habit,
-                numInstancesToday: habit.numInstancesToday + 1
-              }
-            }
+        this.updateHabitInState({
+          ...habit,
+          numInstancesToday: habit.numInstancesToday + 1
+        });
+      })
+    );
+  }
+
+  private updateHabitInState(habit: Habit) {
+    this.state = {
+      ...this.state,
+      root: {
+        ...this.state.root!,
+        habitDictionary: {
+          ...this.state.root!.habitDictionary,
+          [habit.id!]: {
+            ...habit
           }
-        };
-        this._habits$.next(this.state.root!);
+        }
+      }
+    };
+    this._habits$.next(this.state.root!);
+  }
+
+  removeLastInstance(habitId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${environment.apiUrl}/habit-instances/last`,
+      {
+        params: {
+          habitId: habitId
+        }
+      }
+    ).pipe(
+      tap(() => {
+        const habit = this.state.root!.habitDictionary[habitId];
+        this.updateHabitInState({
+          ...habit,
+          numInstancesToday: Math.max(habit.numInstancesToday - 1, 0)
+        });
       })
     );
   }

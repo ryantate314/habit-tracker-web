@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HabitsComponent } from './pages/habits/habits.component';
 import { AddHabitModalComponent } from './pages/habits/add-habit-modal.component';
+import { HistoryComponent } from './pages/history/history.component';
 import { AUTH_INTERCEPTOR } from './interceptors/auth.interceptor';
 import { UNAUTHORIZED_INTERCEPTOR } from './interceptors/unauthorized.interceptor';
 import { LoginComponent } from './pages/login/login.component';
@@ -25,7 +26,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
-import { HistoryComponent } from './pages/history/history.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { HistoryComponent } from './pages/history/history.component';
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSidenavModule
   ],
   providers: [
     AUTH_INTERCEPTOR,
