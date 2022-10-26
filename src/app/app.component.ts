@@ -31,6 +31,8 @@ export class AppComponent {
     ).subscribe(event => {
       this.sideNav?.close();
     });
+
+    this.auth.init();
   }
 
   logout() {

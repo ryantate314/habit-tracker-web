@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable, ReplaySubject, Subject, tap } from 'rxjs';
+import { Router, UrlSerializer } from '@angular/router';
+import { BehaviorSubject, catchError, map, Observable, of, ReplaySubject, Subject, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ALLOW_ANONYMOUS_HEADER } from '../interceptors/auth.interceptor';
 import { User } from '../models/user.model';
@@ -9,6 +9,12 @@ import { User } from '../models/user.model';
 interface TokenPayload {
   userId: string;
   exp: Date
+}
+
+interface Session {
+  user: User;
+  token: string;
+  expiresIn: number;
 }
 
 @Injectable({
@@ -31,25 +37,18 @@ export class AuthService {
   }
 
   constructor(private http: HttpClient, private router: Router) {
-    const token = this.getToken();
-    if (token !== null) {
-      if (token.exp > new Date()) {
-        //Token is still valid
-        this._token$.next(this.getTokenString()!);
-        this._isAuthenticated$.next(true);
-      }
-      else
-        this._isAuthenticated$.next(false);
-    }
-    else
-      this._isAuthenticated$.next(false);
+  }
+
+  public init(): void {
+    this.refreshSession()
+      .subscribe();
   }
 
   private getTokenString() {
     return localStorage.getItem("habit-token");
   }
 
-  private getToken() {
+  private getToken(): TokenPayload | null {
     const tokenString = this.getTokenString();
     let token: TokenPayload | null = null;
     if (tokenString !== null) {
@@ -68,10 +67,13 @@ export class AuthService {
   }
 
   public login(ssoToken: string): Observable<User> {
-    return this.http.post<{ user: User, token: string }>(
+    return this.http.post<Session>(
       `${environment.apiUrl}/users/login`,
       { token: ssoToken },
-      { headers: ALLOW_ANONYMOUS_HEADER}
+      {
+        headers: ALLOW_ANONYMOUS_HEADER,
+        withCredentials: true
+      }
     ).pipe(
       tap(res => {
         this.saveToken(res.token);
@@ -82,6 +84,34 @@ export class AuthService {
       }),
       map(res => {
         return res.user;
+      })
+    );
+  }
+
+  public refreshSession(): Observable<User | null> {
+    return this.http.post<Session>(
+      `${environment.apiUrl}/users/refresh`,
+      null,
+      {
+        headers: ALLOW_ANONYMOUS_HEADER,
+        withCredentials: true
+      }
+    ).pipe(
+      tap(res => {
+        this._token$.next(res.token);
+        this._user$.next(res.user);
+        this._isAuthenticated$.next(true);
+      }),
+      map(session => session.user),
+      catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status == 401) {
+            this._isAuthenticated$.next(false);
+            return of(null);
+          }
+        }
+        console.error("Error getting refresh token", err);
+        return throwError(() => err);
       })
     );
   }

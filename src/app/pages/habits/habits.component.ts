@@ -170,6 +170,10 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   }
 
+  deleteCategory(category: HabitCategory) {
+
+  }
+
   clickHabit(habit: Habit) {
     const instance: HabitInstance = {
       habitId: habit.id!,

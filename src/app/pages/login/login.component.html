@@ -1,19 +1,20 @@
-<div class="login-card card">
-    <div class="card-body">
+<div id="g_id_onload"
+    attr.data-client_id="{{googleClientId}}"
+    data-callback="handleGoogleSignin"
+    data-auto_prompt="false"
+>
+</div>
+<mat-card class="login-card">
+    <mat-card-content>
         <h4>Ryan's Habit Tracker</h4>
         <p>Please login to continue.</p>
-        <div id="g_id_onload"
-            attr.data-client_id="{{googleClientId}}"
-            data-callback="handleGoogleSignin"
-            data-auto_prompt="false">
-        </div>
         <div class="g_id_signin"
             data-type="standard"
             data-size="large"
-            data-theme="outline"
+            data-theme="filled_black"
             data-text="sign_in_with"
             data-shape="rectangular"
             data-logo_alignment="left">
-        </div>
-    </div>
-</div>
+      </div>
+    </mat-card-content>
+</mat-card>

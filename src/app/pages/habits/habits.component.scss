@@ -1,6 +1,6 @@
 .category {
-    width: 6em;
-    height: 6em;
+    width: 10em;
+    height: 10em;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -10,8 +10,8 @@
 }
 
 .habit {
-    width: 5em;
-    height: 5em;
+    width: 9em;
+    height: 9em;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -32,3 +32,6 @@
     text-decoration: none;
 }
 
+.item-danger {
+    color: red;
+}

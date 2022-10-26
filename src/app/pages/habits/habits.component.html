@@ -50,11 +50,14 @@
 <mat-menu #habitContextMenu="matMenu"> 
   <ng-template matMenuContent let-data="data">
     <ng-container *ngIf="data.type == 'Category'">
-        <button mat-menu-item (click)="editHabit(data.habit)">Edit</button>
+        <button mat-menu-item (click)="editCategory(data.category)">Edit</button>
+        <button mat-menu-item (click)="deleteCategory(data.category)">Delete</button>
     </ng-container>
     <ng-container *ngIf="data.type == 'Habit'">
-        <button mat-menu-item (click)="editCategory(data.category)">Edit</button>
-        <button mat-menu-item [disabled]="data.habit.numInstancesToday == 0" (click)="removeLastInstance(data.habit)">Remove Last Instance</button>
+        <button mat-menu-item>Add With Date</button>
+        <button mat-menu-item *ngIf="data.habit.numInstancesToday > 0" (click)="removeLastInstance(data.habit)">Remove Last Instance</button>
+        <button mat-menu-item (click)="editHabit(data.habit)">Edit</button>
+        <button mat-menu-item class="item-danger" (click)="deleteHabit(data.habit)">Delete</button>
     </ng-container>
   </ng-template> 
 </mat-menu> 
