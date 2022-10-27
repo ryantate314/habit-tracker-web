@@ -36,27 +36,12 @@ export class AuthInterceptor implements HttpInterceptor {
         if (isAuthenticated) {
           console.log("Adding auth token", request.url);
           return next.handle(
-            request.clone({
-              headers: request.headers.set("Authorization", `Bearer ${token}`)
-            })
+            this.addAuthorizationToken(request, token)
           ).pipe(
-            catchError((err: HttpErrorResponse) => {
+            catchError((err: any) => {
               // If the request was not authenticated, attempt to refresh the token and try again.
-              if (err.status == 401) {
-                return this.auth.refreshSession().pipe(
-                  catchError((refreshError: HttpErrorResponse) => {
-                    // The refresh token is expired
-                    if (refreshError.status == 401)
-                      this.auth.logout();
-                    return throwError(refreshError);
-                  }),
-                  withLatestFrom(this.auth.token$),
-                  // Try again with new token
-                  switchMap(token => next.handle(
-                    request.clone({
-                      headers: request.headers.set("Authorization", `Bearer ${token}`)
-                    }))
-                ));
+              if (err instanceof HttpErrorResponse && err.status === 401) {
+                return this.handle401Error(request, next);
               }
               else
                 return throwError(() => err);
@@ -71,12 +56,36 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  protected ignoreRequest(request: HttpRequest<unknown>): boolean {
+  protected handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    console.log("Refreshing token");
+    return this.auth.refreshSession().pipe(
+      catchError((refreshError: HttpErrorResponse) => {
+        console.log("Refresh token is expired");
+        // The refresh token is expired
+        // if (refreshError.status == 401)
+        //   this.auth.logout();
+        return throwError(() => refreshError);
+      }),
+      withLatestFrom(this.auth.token$),
+      // Try again with new token
+      switchMap(([_, token]) => next.handle(
+        this.addAuthorizationToken(request, token)
+      ))
+    );
+  }
+
+  protected ignoreRequest(request: HttpRequest<any>): boolean {
     if (request.headers.get(WHITELIST_HEADER_NAME) !== null) {
       request.headers.delete(WHITELIST_HEADER_NAME);
       return true;
     }
     return false;
+  }
+
+  protected addAuthorizationToken<T>(request: HttpRequest<T>, token: string): HttpRequest<T> {
+    return request.clone({
+      headers: request.headers.set("Authorization", `Bearer ${token}`)
+    });
   }
 }
 

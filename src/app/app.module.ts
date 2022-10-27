@@ -59,8 +59,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatSidenavModule
   ],
   providers: [
-    AUTH_INTERCEPTOR,
-    UNAUTHORIZED_INTERCEPTOR
+    UNAUTHORIZED_INTERCEPTOR,
+    AUTH_INTERCEPTOR
   ],
   bootstrap: [AppComponent]
 })
