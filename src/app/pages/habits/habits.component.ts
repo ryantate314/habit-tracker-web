@@ -8,6 +8,7 @@ import { AuthService } from '@app/services/auth.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddHabitModalComponent, DialogData } from './add-habit-modal.component';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 interface ContextMenuData {
   type: 'Habit' | 'Category',
@@ -44,7 +45,8 @@ export class HabitsComponent implements OnInit, OnDestroy {
     private router: Router,
     fb: FormBuilder,
     private dialog: MatDialog,
-    private auth: AuthService
+    private auth: AuthService,
+    private admiralSnackbar: SnackbarService
   ) {
     this.root$ = this.habitService.habits$;
 
@@ -183,6 +185,9 @@ export class HabitsComponent implements OnInit, OnDestroy {
     this.habitService.logHabit(instance)
       .subscribe(() => {
 
+      },
+      (error) => {
+        this.admiralSnackbar.showError("Error logging habit.");
       });
   }
 
@@ -225,7 +230,11 @@ export class HabitsComponent implements OnInit, OnDestroy {
 
   removeLastInstance(habit: Habit) {
     this.habitService.removeLastInstance(habit.id!)
-      .subscribe(() => {});
+      .subscribe(
+        () => {},
+        (error) => {
+          this.admiralSnackbar.showError("Error deleting habit instance.");
+        });
   }
 
 }

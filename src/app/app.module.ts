@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatInputModule,
     MatFormFieldModule,
     MatRadioModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatSnackBarModule
   ],
   providers: [
     UNAUTHORIZED_INTERCEPTOR,

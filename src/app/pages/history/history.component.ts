@@ -2,7 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HabitInstance } from '@app/models/habit.model';
 import { HabitService } from '@app/services/habit.service';
-import { combineLatest, map, Observable, Subject, switchMap, withLatestFrom } from 'rxjs';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { catchError, combineLatest, map, Observable, of, Subject, switchMap, withLatestFrom } from 'rxjs';
 
 function midnight(date: Date): Date {
   return new Date(
@@ -56,7 +57,11 @@ export class HistoryComponent implements OnInit {
   public next$ = new Subject<void>();
   public previous$ = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private service: HabitService, private router: Router) {
+  constructor(private route: ActivatedRoute,
+    private service: HabitService,
+    private router: Router,
+    private admiralSnackbar: SnackbarService
+  ) {
     const displayMode$ = this.route.queryParamMap.pipe(
       map(params => params.get('display')),
       map(display => display != 'day' && display != 'week' ? null : display),
@@ -102,7 +107,11 @@ export class HistoryComponent implements OnInit {
               date: params.startDate,
               habits: instances
             }]
-          )
+          ),
+          catchError(err => {
+            this.admiralSnackbar.showError("Error getting habit history.");
+            return of(err);
+          })
         );
       })
     );
