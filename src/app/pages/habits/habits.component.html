@@ -57,6 +57,8 @@
         <button mat-menu-item>Add With Date</button>
         <button mat-menu-item *ngIf="data.habit.numInstancesToday > 0" (click)="removeLastInstance(data.habit)">Remove Last Instance</button>
         <button mat-menu-item (click)="editHabit(data.habit)">Edit</button>
+        <button mat-menu-item>Move</button>
+        <button mat-menu-item>Re-order</button>
         <button mat-menu-item class="item-danger" (click)="deleteHabit(data.habit)">Delete</button>
     </ng-container>
   </ng-template> 

@@ -1,22 +1,21 @@
 .category {
-    width: 10em;
-    height: 10em;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    margin-left: 1em;
-    margin-bottom: 1em;
-}
-
-.habit {
     width: 9em;
     height: 9em;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
-    margin-left: 1em;
+    margin: 0.5em;
+}
+
+.habit {
+    width: 8em;
+    height: 8em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    margin: 1em;
 }
 
 .btn-circle {

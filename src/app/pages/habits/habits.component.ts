@@ -133,7 +133,8 @@ export class HabitsComponent implements OnInit, OnDestroy {
   }
 
   deleteHabit(habit: Habit) {
-
+    this.habitService.deleteHabit(habit.id!)
+      .subscribe();
   }
 
   addHabitSubmit(parentCategoryId: string) {

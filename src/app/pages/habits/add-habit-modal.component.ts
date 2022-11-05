@@ -31,27 +31,29 @@ export class AddHabitModalComponent {
     }
 
     public onSubmit() {
-        if (this.addHabitForm.get('category')!.value === 'habit') {
-            const habit: Habit = {
-                name: this.addHabitForm.get('name')!.value,
-                numInstancesToday: 0,
-                parentCategoryId: this.data.parentCategoryId,
-            };
-            this.dialogRef.close(
-                this.service.createHabit(habit)
-            );
-        }
-        else {
-            const category: HabitCategory = {
-                name: this.addHabitForm.get('name')!.value,
-                color: null,
-                parentCategoryId: this.data.parentCategoryId,
-                habits: [],
-                subCategories: []
-            };
-            this.dialogRef.close(
-                this.service.createCategory(category)
-            );
+        if (this.addHabitForm.valid) {
+            if (this.addHabitForm.get('category')!.value === 'habit') {
+                const habit: Habit = {
+                    name: this.addHabitForm.get('name')!.value,
+                    numInstancesToday: 0,
+                    parentCategoryId: this.data.parentCategoryId,
+                };
+                this.dialogRef.close(
+                    this.service.createHabit(habit)
+                );
+            }
+            else {
+                const category: HabitCategory = {
+                    name: this.addHabitForm.get('name')!.value,
+                    color: null,
+                    parentCategoryId: this.data.parentCategoryId,
+                    habits: [],
+                    subCategories: []
+                };
+                this.dialogRef.close(
+                    this.service.createCategory(category)
+                );
+            }
         }
     }
 }

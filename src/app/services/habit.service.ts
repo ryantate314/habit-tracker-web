@@ -26,6 +26,10 @@ export class HabitService {
 
   constructor(private http: HttpClient) { }
 
+  private publishState(): void {
+    this._habits$.next(this.state.root!);
+  }
+
   public getHabits(): Observable<HabitRoot> {
     // Don't re-query habits after the first one
     // TODO enable periodically updating habits or implement web socket
@@ -40,7 +44,7 @@ export class HabitService {
           ...this.state,
           root: habits
         };
-        this._habits$.next(this.state.root!);
+        this.publishState();
       })
     );
   }
@@ -52,7 +56,7 @@ export class HabitService {
     ).pipe(
       tap(habit => {
         this.state = this.addHabitToState(this.state, habit);
-        this._habits$.next(this.state.root!);
+        this.publishState();
       })
     );
   }
@@ -91,7 +95,7 @@ export class HabitService {
     ).pipe(
       tap(category => {
         this.state = this.addCategoryToState(this.state, category);
-        this._habits$.next(this.state.root!);
+        this.publishState();
       })
     );
   }
@@ -151,7 +155,7 @@ export class HabitService {
         }
       }
     };
-    this._habits$.next(this.state.root!);
+    this.publishState();
   }
 
   removeLastInstance(habitId: string): Observable<void> {
@@ -188,6 +192,46 @@ export class HabitService {
         instanceDate: new Date(instance.instanceDate)
       })))
     )
+  }
+
+  public deleteHabit(habitId: string): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/habits`, {
+      params: { habitId: habitId }
+    }).pipe(
+      tap(() => {
+        if (this.state.root) {
+          const newRoot = { ...this.state.root.root };
+          // const newHabitDictionary = { ...this.state.root.habitDictionary };
+          const newCategoryDictionary = { ...this.state.root.categoryDictionary };
+
+          // Remove the habit from the parent category, but keep it in the dictionary for now
+          const habit = this.state.root.habitDictionary[habitId];
+          if (!habit)
+            return;
+          else if (habit.parentCategoryId) {
+            // This habit has a category
+            const parentCategory = this.state.root.categoryDictionary[habit.parentCategoryId];
+            const newParentCategory = {
+              ...parentCategory,
+              habits: parentCategory.habits.filter(x => x !== habitId)
+            }
+            newCategoryDictionary[habit.parentCategoryId] = newParentCategory;
+          }
+          else {
+            // This is a root habit
+            newRoot.habits = newRoot.habits.filter(x => x !== habitId);
+          }
+          
+          this.state.root = {
+            ...this.state.root,
+            root: newRoot,
+            // habitDictionary: newHabitDictionary,
+            categoryDictionary: newCategoryDictionary
+          };
+          this.publishState();
+        }
+      })
+    );
   }
 
 }
